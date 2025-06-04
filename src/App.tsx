@@ -1,11 +1,17 @@
-import Signup from "./components/signup"
+// src/App.tsx
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-const App = () => {
+import Navbar from './components/Navbar';
+import AppRoutes from './Approutes';
+
+const App: React.FC = () => {
   return (
-    <div>
-      <Signup />
-    </div>
-  )
-}
+    <Router> 
+      <Navbar />
+      <AppRoutes />
+    </Router>
+  );
+};
 
-export default App
+export default App;
