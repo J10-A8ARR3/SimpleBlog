@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
-import AppRoutes from './Approutes';
+import AppRoutes from './routes/Approutes';
 import Footer from './components/Footer';
 
 const App: React.FC = () => {
