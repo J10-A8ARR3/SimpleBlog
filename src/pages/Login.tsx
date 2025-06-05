@@ -1,14 +1,38 @@
-const Login = () => {
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabaseClient';
+
+const Login: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      alert(error.message);
+    } else {
+      navigate('/blogs');
+    }
+  };
+
   return (
     <div className="max-w-md mx-auto mt-20 p-8 border border-gray-300 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
-      <form action="/login" method="POST" className="space-y-6">
+      <form onSubmit={handleLogin} className="space-y-6">
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
           <input
-            type="text"
+            type="email"
             id="email"
-            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
                        placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -20,7 +44,8 @@ const Login = () => {
           <input
             type="password"
             id="password"
-            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
                        placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -42,7 +67,7 @@ const Login = () => {
         </a>
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

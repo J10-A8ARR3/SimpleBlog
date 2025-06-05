@@ -1,10 +1,13 @@
+// Navbar.tsx
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Navbar = () => {
-  return (
-    <div className="border bg-blue-900  p-4 max-w-full">
-      <h1 className="text-xl font-semibold text-center text-white">Navbar</h1>
-    </div>
-  )
-}
+const Navbar: React.FC = () => (
+  <nav className="bg-gray-800 p-4 text-white">
+    <Link to="/blogs" className="mr-4">Blogs</Link>
+    <Link to="/login" className="mr-4">Login</Link>
+    <Link to="/register">Register</Link>
+  </nav>
+);
 
-export default Navbar
+export default Navbar;

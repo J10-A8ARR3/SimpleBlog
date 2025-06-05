@@ -1,4 +1,3 @@
-// src/AppRoutes.tsx or src/Routers.tsx
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 

@@ -7,17 +7,13 @@ import Footer from './components/Footer';
 
 const App: React.FC = () => {
   return (
-    <Router> 
-      <div className="flex flex-col min-h-screen">  {/* full height, flex column */}
-        
+    <Router>
+      <div className="flex flex-col min-h-screen">
         <Navbar />
-        
-        <main className="flex-grow my-4">  {/* this will expand to fill space with vertical margin */}
+        <main className="flex-grow my-4">
           <AppRoutes />
         </main>
-        
-        <Footer />  {/* footer stays at bottom if content short */}
-        
+        <Footer />
       </div>
     </Router>
   );
