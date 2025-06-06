@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { fetchBlogs, deleteBlog } from '../redux/blogSlice'
 import { useNavigate } from 'react-router-dom'
-import Pagination from '../components/pagination'
+import Pagination from '../components/Pagination'
 
 const BlogList: React.FC = () => {
   const dispatch = useAppDispatch()
