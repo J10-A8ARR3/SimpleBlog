@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { fetchBlogs, deleteBlog } from '../redux/blogSlice'
 import { useNavigate } from 'react-router-dom'
+import Pagination from '../components/pagination'
 
 const BlogList: React.FC = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { blogs, loading, error } = useAppSelector((state) => state.blogs)
+
+  const blogsPerPage = 5
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     dispatch(fetchBlogs())
@@ -16,8 +20,12 @@ const BlogList: React.FC = () => {
     dispatch(deleteBlog(id))
   }
 
+  const totalPages = Math.ceil(blogs.length / blogsPerPage)
+  const startIndex = (currentPage - 1) * blogsPerPage
+  const currentBlogs = blogs.slice(startIndex, startIndex + blogsPerPage)
+
   return (
-    <div>
+    <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Blogs</h2>
         <button
@@ -32,7 +40,7 @@ const BlogList: React.FC = () => {
       {error && <p className="text-red-500">{error}</p>}
 
       <ul className="space-y-4">
-        {blogs.map((blog) => (
+        {currentBlogs.map((blog) => (
           <li key={blog.id} className="p-4 border rounded">
             <h3 className="text-xl font-semibold">{blog.title}</h3>
             <p>{blog.content}</p>
@@ -45,6 +53,15 @@ const BlogList: React.FC = () => {
           </li>
         ))}
       </ul>
+
+      {/* Use reusable Pagination component */}
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   )
 }
