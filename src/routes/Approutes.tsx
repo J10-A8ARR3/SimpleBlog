@@ -18,7 +18,9 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ onLogin }) => {
       <Route path="/" element={<Login onLogin={onLogin} />} />
       <Route path="/login" element={<Login onLogin={onLogin} />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/blogs" element={<BlogList />} />
+      <Route path="/blogs" element={<BlogList onLogin={function (): void {
+        throw new Error('Function not implemented.');
+      } } />} />
       <Route path="/blogs/create" element={<CreateBlog />} />
       <Route path="/blogs/edit/:id" element={<EditBlog />} />
     </Routes>
