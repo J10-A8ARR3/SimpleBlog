@@ -3,7 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { updateBlog, fetchBlogs } from '../redux/blogSlice'
 
-const EditBlog: React.FC = () => {
+interface EditBlogProps {
+  onLogin?: () => void // optionally add if needed
+}
+
+const EditBlog: React.FC<EditBlogProps> = ({ onLogin }) => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -19,6 +23,7 @@ const EditBlog: React.FC = () => {
   }, [dispatch, blogs.length])
 
   useEffect(() => {
+    if (!id) return
     const blogToEdit = blogs.find((blog) => blog.id === id)
     if (blogToEdit) {
       setTitle(blogToEdit.title)
@@ -43,7 +48,7 @@ const EditBlog: React.FC = () => {
 
       <form onSubmit={handleUpdate} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium">Title</label>
+          <label className="block text-sm font-medium mb-1">Title</label>
           <input
             type="text"
             value={title}
@@ -54,7 +59,7 @@ const EditBlog: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Content</label>
+          <label className="block text-sm font-medium mb-1">Content</label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -65,7 +70,7 @@ const EditBlog: React.FC = () => {
 
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
         >
           Update Blog
         </button>
