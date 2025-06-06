@@ -1,3 +1,5 @@
+// src/routes/AppRoutes.tsx
+
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
@@ -21,12 +23,12 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ onLogin }) => {
       {/* Register does not need onLogin */}
       <Route path="/register" element={<Register />} />
 
-      {/* BlogList requires onLogin prop, so we pass it here */}
-      <Route path="/blogs" element={<BlogList onLogin={onLogin} />} />
-
-      {/* If CreateBlog and EditBlog need onLogin, pass it as well */}
-      <Route path="/blogs/create" element={<CreateBlog onLogin={onLogin} />} />
-      <Route path="/blogs/edit/:id" element={<EditBlog onLogin={onLogin} />} />
+      {/* Blog-related routes without onLogin */}
+      <Route path="/blogs" element={<BlogList onLogin={function (): void {
+        throw new Error('Function not implemented.');
+      } } />} />
+      <Route path="/blogs/create" element={<CreateBlog />} />
+      <Route path="/blogs/edit/:id" element={<EditBlog />} />
     </Routes>
   );
 };

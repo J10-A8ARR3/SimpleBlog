@@ -1,22 +1,24 @@
-import React, { useState } from 'react'
-import { createBlog } from '../api/blogApi'
-import { useNavigate } from 'react-router-dom'
+// src/pages/CreateBlog.tsx
+
+import React, { useState } from 'react';
+import { createBlog } from '../api/blogApi';
+import { useNavigate } from 'react-router-dom';
 
 const CreateBlog: React.FC = () => {
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const navigate = useNavigate()
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await createBlog(title, content)
-      navigate('/blogs')
+      await createBlog(title, content);
+      navigate('/blogs');
     } catch (error) {
-      alert('Error creating blog')
-      console.error(error)
+      alert('Error creating blog');
+      console.error(error);
     }
-  }
+  };
 
   return (
     <div className="max-w-lg mx-auto mt-10">
@@ -45,7 +47,7 @@ const CreateBlog: React.FC = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default CreateBlog
+export default CreateBlog;
