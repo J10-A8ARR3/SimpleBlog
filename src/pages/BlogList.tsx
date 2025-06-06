@@ -20,6 +20,10 @@ const BlogList: React.FC = () => {
     dispatch(deleteBlog(id))
   }
 
+  const handleEdit = (id: string) => {
+    navigate(`/blogs/edit/${id}`)
+  }
+
   const totalPages = Math.ceil(blogs.length / blogsPerPage)
   const startIndex = (currentPage - 1) * blogsPerPage
   const currentBlogs = blogs.slice(startIndex, startIndex + blogsPerPage)
@@ -44,17 +48,24 @@ const BlogList: React.FC = () => {
           <li key={blog.id} className="p-4 border rounded">
             <h3 className="text-xl font-semibold">{blog.title}</h3>
             <p>{blog.content}</p>
-            <button
-              onClick={() => handleDelete(blog.id)}
-              className="text-red-500 mt-2"
-            >
-              Delete
-            </button>
+            <div className="flex space-x-4 mt-2">
+              <button
+                onClick={() => handleEdit(blog.id)}
+                className="text-blue-500 hover:underline"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(blog.id)}
+                className="text-red-500 hover:underline"
+              >
+                Delete
+              </button>
+            </div>
           </li>
         ))}
       </ul>
 
-      {/* Use reusable Pagination component */}
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
