@@ -3,11 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { updateBlog, fetchBlogs } from '../redux/blogSlice'
 
-interface EditBlogProps {
-  onLogin?: () => void // optionally add if needed
-}
-
-const EditBlog: React.FC<EditBlogProps> = ({ onLogin }) => {
+const EditBlog: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()

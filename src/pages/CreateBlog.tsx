@@ -2,11 +2,7 @@ import React, { useState } from 'react'
 import { createBlog } from '../api/blogApi'
 import { useNavigate } from 'react-router-dom'
 
-interface CreateBlogProps {
-  onLogin?: () => void // add if you want to receive onLogin prop optionally
-}
-
-const CreateBlog: React.FC<CreateBlogProps> = ({ onLogin }) => {
+const CreateBlog: React.FC = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const navigate = useNavigate()
@@ -15,7 +11,7 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ onLogin }) => {
     e.preventDefault()
     try {
       await createBlog(title, content)
-      navigate('/blogs') // Redirect after creation
+      navigate('/blogs')
     } catch (error) {
       alert('Error creating blog')
       console.error(error)
