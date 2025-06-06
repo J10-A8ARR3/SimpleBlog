@@ -43,10 +43,8 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => {
                 Logout
               </button>
             ) : (
-              <div className="space-x-4">
-                <Link to="/login" className="hover:underline">Login</Link>
-                <Link to="/register" className="hover:underline">Register</Link>
-              </div>
+              // Removed the Login and Register links, so show nothing here for not logged in
+              null
             )}
           </div>
         </div>
