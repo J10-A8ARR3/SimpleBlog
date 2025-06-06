@@ -1,78 +1,80 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
+import React, { useEffect, useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { fetchBlogs, deleteBlog } from '../redux/blogSlice'
+import { useNavigate } from 'react-router-dom'
+import Pagination from '../components/Pagination'
 
-interface LoginProps {
-  onLogin: () => void;
-}
+const BlogList: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const { blogs, loading, error } = useAppSelector((state) => state.blogs)
 
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const blogsPerPage = 5
+  const [currentPage, setCurrentPage] = useState(1)
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    dispatch(fetchBlogs())
+  }, [dispatch])
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+  const handleDelete = (id: string) => {
+    dispatch(deleteBlog(id))
+  }
 
-    if (error) {
-      alert(error.message);
-    } else {
-      onLogin(); // call to update login state in App
-      navigate('/blogs');
-    }
-  };
+  const handleEdit = (id: string) => {
+    navigate(`/blogs/edit/${id}`)
+  }
+
+  const totalPages = Math.ceil(blogs.length / blogsPerPage)
+  const startIndex = (currentPage - 1) * blogsPerPage
+  const currentBlogs = blogs.slice(startIndex, startIndex + blogsPerPage)
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-8 border border-gray-300 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
-      <form onSubmit={handleLogin} className="space-y-6">
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
-                       placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
-                       placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Blogs</h2>
         <button
-          type="submit"
-          className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition"
+          onClick={() => navigate('/blogs/create')}
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
         >
-          Login
+          Create Blog
         </button>
-      </form>
+      </div>
 
-      <p className="mt-4 text-center text-gray-600">
-        Don't have an account?{' '}
-        <Link to="/register" className="text-blue-600 hover:underline">
-          Sign up here
-        </Link>
-      </p>
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+
+      <ul className="space-y-4">
+        {currentBlogs.map((blog) => (
+          <li key={blog.id} className="p-4 border rounded">
+            <h3 className="text-xl font-semibold">{blog.title}</h3>
+            <p>{blog.content}</p>
+            <div className="flex space-x-4 mt-2">
+              <button
+                onClick={() => handleEdit(blog.id)}
+                className="text-blue-500 hover:underline"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(blog.id)}
+                className="text-red-500 hover:underline"
+              >
+                Delete
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default BlogList
