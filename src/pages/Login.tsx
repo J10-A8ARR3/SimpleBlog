@@ -1,5 +1,6 @@
+// Login.tsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 
 interface LoginProps {
@@ -67,9 +68,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
       <p className="mt-4 text-center text-gray-600">
         Don't have an account?{' '}
-        <a href="/register" className="text-blue-600 hover:underline">
+        <Link to="/register" className="text-blue-600 hover:underline">
           Sign up here
-        </a>
+        </Link>
       </p>
     </div>
   );
