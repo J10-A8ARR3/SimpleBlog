@@ -1,3 +1,4 @@
+// AppRoutes.tsx
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
@@ -7,11 +8,15 @@ import Register from '../pages/Register';
 import CreateBlog from '../pages/CreateBlog';
 import EditBlog from '../pages/EditBlog';
 
-const AppRoutes: React.FC = () => {
+interface AppRoutesProps {
+  onLogin: () => void;
+}
+
+const AppRoutes: React.FC<AppRoutesProps> = ({ onLogin }) => {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Login onLogin={onLogin} />} />
+      <Route path="/login" element={<Login onLogin={onLogin} />} />
       <Route path="/register" element={<Register />} />
       <Route path="/blogs" element={<BlogList />} />
       <Route path="/blogs/create" element={<CreateBlog />} />
