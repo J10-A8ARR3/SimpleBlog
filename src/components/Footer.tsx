@@ -3,11 +3,11 @@ import { SiTailwindcss, SiSupabase, SiRedux } from 'react-icons/si'
 
 const Footer = () => {
   return (
-    <footer className="h-[70px] mt-8 mb-2 flex items-center">
-      <div className="max-w-6xl mx-auto px-4 flex justify-between items-center text-gray-700 text-sm gap-[300px]">
+    <footer className="h-auto">
+      <div className="max-w-6xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center text-gray-700 text-sm space-y-4 md:space-y-0">
         
         {/* Left Section */}
-        <div className="font-bold text-md tracking-wide">
+        <div className="font-bold text-md tracking-wide text-center md:text-left">
           Jeo Abarre <span className="font-normal">| 2025 - Simple Blog</span>
         </div>
 
