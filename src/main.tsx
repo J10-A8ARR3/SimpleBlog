@@ -6,10 +6,6 @@ import { store } from './redux/store';
 import App from './App';
 import './index.css';
 
-// Expose store globally for testing in console
-// @ts-ignore
-window.store = store;
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
