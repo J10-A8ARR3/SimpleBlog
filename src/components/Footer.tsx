@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto px-4 flex justify-between items-center text-gray-700 text-sm gap-[300px]">
         
         {/* Left Section */}
-        <div className="font-bold text-lg tracking-wide">
+        <div className="font-bold text-md tracking-wide">
           Jeo Abarre <span className="font-normal">| 2025 - Simple Blog</span>
         </div>
 
