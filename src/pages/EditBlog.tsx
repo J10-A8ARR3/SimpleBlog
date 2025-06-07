@@ -39,8 +39,6 @@ const EditBlog: React.FC = () => {
 
   const handleDelete = () => {
     if (id && confirm('Are you sure you want to delete this blog?')) {
-      // dispatch delete action here, e.g. dispatch(deleteBlog(id))
-      // navigate somewhere after delete if needed
       console.log('Delete confirmed for blog', id)
     }
   }
