@@ -1,32 +1,37 @@
-import React, { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { fetchBlogs, deleteBlog } from '../redux/blogSlice'
-import { useNavigate } from 'react-router-dom'
-import Pagination from '../components/Pagination'
+import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { fetchBlogs, deleteBlog } from '../redux/blogSlice';
+import { useNavigate } from 'react-router-dom';
+import Pagination from '../components/Pagination';
+import useConfirm from '../components/UseConfirm'; 
 
 const BlogList: React.FC = () => {
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const { blogs, loading, error } = useAppSelector((state) => state.blogs)
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const confirm = useConfirm(); 
+  const { blogs, loading, error } = useAppSelector((state) => state.blogs);
 
-  const blogsPerPage = 5
-  const [currentPage, setCurrentPage] = useState(1)
+  const blogsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchBlogs())
-  }, [dispatch])
+    dispatch(fetchBlogs());
+  }, [dispatch]);
 
   const handleDelete = (id: string) => {
-    dispatch(deleteBlog(id))
-  }
+    const confirmed = confirm('Are you sure you want to delete this blog?'); // ✅ Add confirm
+    if (!confirmed) return;
+
+    dispatch(deleteBlog(id));
+  };
 
   const handleEdit = (id: string) => {
-    navigate(`/blogs/edit/${id}`)
-  }
+    navigate(`/blogs/edit/${id}`);
+  };
 
-  const totalPages = Math.ceil(blogs.length / blogsPerPage)
-  const startIndex = (currentPage - 1) * blogsPerPage
-  const currentBlogs = blogs.slice(startIndex, startIndex + blogsPerPage)
+  const totalPages = Math.ceil(blogs.length / blogsPerPage);
+  const startIndex = (currentPage - 1) * blogsPerPage;
+  const currentBlogs = blogs.slice(startIndex, startIndex + blogsPerPage);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -56,7 +61,7 @@ const BlogList: React.FC = () => {
                 Edit
               </button>
               <button
-                onClick={() => handleDelete(blog.id)}
+                onClick={() => handleDelete(blog.id)} // ✅ Delete with confirm
                 className="text-red-500 hover:underline"
               >
                 Delete
@@ -74,7 +79,7 @@ const BlogList: React.FC = () => {
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default BlogList
+export default BlogList;

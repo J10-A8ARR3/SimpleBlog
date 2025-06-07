@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { updateBlog, fetchBlogs } from '../redux/blogSlice'
+import useConfirm from '../components/UseConfirm'
 
 const EditBlog: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const confirm = useConfirm()
 
   const { blogs, loading, error } = useAppSelector((state) => state.blogs)
   const [title, setTitle] = useState('')
@@ -29,9 +31,17 @@ const EditBlog: React.FC = () => {
 
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault()
-    if (id) {
+    if (id && confirm('Are you sure you want to update this blog?')) {
       dispatch(updateBlog({ id, title, content }))
       navigate('/blogs')
+    }
+  }
+
+  const handleDelete = () => {
+    if (id && confirm('Are you sure you want to delete this blog?')) {
+      // dispatch delete action here, e.g. dispatch(deleteBlog(id))
+      // navigate somewhere after delete if needed
+      console.log('Delete confirmed for blog', id)
     }
   }
 
@@ -64,12 +74,22 @@ const EditBlog: React.FC = () => {
           />
         </div>
 
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-        >
-          Update Blog
-        </button>
+        <div className="flex gap-4">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          >
+            Update Blog
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+          >
+            Delete Blog
+          </button>
+        </div>
       </form>
     </div>
   )

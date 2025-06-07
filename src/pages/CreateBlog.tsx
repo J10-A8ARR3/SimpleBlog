@@ -1,16 +1,19 @@
-// src/pages/CreateBlog.tsx
-
 import React, { useState } from 'react';
 import { createBlog } from '../api/blogApi';
 import { useNavigate } from 'react-router-dom';
-
+import useConfirm from '../components/UseConfirm'; 
 const CreateBlog: React.FC = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const navigate = useNavigate();
+  const confirm = useConfirm();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const confirmed = confirm('Are you sure you want to create this blog?');
+    if (!confirmed) return;
+
     try {
       await createBlog(title, content);
       navigate('/blogs');
