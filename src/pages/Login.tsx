@@ -1,4 +1,3 @@
-// Login.tsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
@@ -10,10 +9,12 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg(null); // Clear previous error
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -21,9 +22,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     });
 
     if (error) {
-      alert(error.message);
+      setErrorMsg('Invalid email or password. Please try again.');
     } else {
-      onLogin(); // call to update login state in App
+      onLogin();
       navigate('/blogs');
     }
   };
@@ -31,6 +32,21 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   return (
     <div className="max-w-md mx-auto mt-20 p-8 border border-gray-300 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
+
+      {/* Error Message */}
+      {errorMsg && (
+        <div className="mb-4 p-3 bg-red-100 text-red-700 border border-red-400 rounded relative">
+          {errorMsg}
+          <button
+            onClick={() => setErrorMsg(null)}
+            className="absolute top-1 right-2 text-red-500 hover:text-red-700"
+            aria-label="Dismiss"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       <form onSubmit={handleLogin} className="space-y-6">
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
