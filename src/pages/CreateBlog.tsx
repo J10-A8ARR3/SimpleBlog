@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createBlog } from '../api/blogApi';
 import { useNavigate } from 'react-router-dom';
 import useConfirm from '../components/UseConfirm'; 
+
 const CreateBlog: React.FC = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -23,6 +24,11 @@ const CreateBlog: React.FC = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate(-1); // Goes back one step in history
+    // or use: navigate('/blogs'); to go to blogs list explicitly
+  };
+
   return (
     <div className="max-w-lg mx-auto mt-10">
       <h2 className="text-xl font-bold mb-4">Create Blog</h2>
@@ -42,12 +48,21 @@ const CreateBlog: React.FC = () => {
           className="w-full border p-2 h-40 rounded"
           required
         />
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-          type="submit"
-        >
-          Submit
-        </button>
+        <div className="flex space-x-4">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition"
+          >
+            Back
+          </button>
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+            type="submit"
+          >
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );
