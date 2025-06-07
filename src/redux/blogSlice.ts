@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { supabase } from '../lib/supabaseClient'
+import type { RootState } from './store' // adjust if your RootState is elsewhere
 
 export interface Blog {
   id: string
   title: string
   content: string
   created_at: string
+  user_id: string
 }
 
 interface BlogState {
@@ -20,19 +22,42 @@ const initialState: BlogState = {
   error: null,
 }
 
-// 🔄 Fetch Blogs
-export const fetchBlogs = createAsyncThunk('blogs/fetchBlogs', async () => {
-  const { data, error } = await supabase.from('blogs').select('*').order('created_at', { ascending: false })
-  if (error) throw new Error(error.message)
-  return data as Blog[]
-})
+// 🔄 Fetch Blogs (only for current user)
+export const fetchBlogs = createAsyncThunk(
+  'blogs/fetchBlogs',
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState() as RootState
+    const userId = state.auth.user?.id
+
+    if (!userId) return rejectWithValue('User not logged in')
+
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+
+    if (error) return rejectWithValue(error.message)
+    return data as Blog[]
+  }
+)
 
 // ➕ Create Blog
 export const createBlog = createAsyncThunk(
   'blogs/createBlog',
-  async (payload: { title: string; content: string }) => {
-    const { data, error } = await supabase.from('blogs').insert(payload).select().single()
-    if (error) throw new Error(error.message)
+  async (payload: { title: string; content: string }, { getState, rejectWithValue }) => {
+    const state = getState() as RootState
+    const userId = state.auth.user?.id
+
+    if (!userId) return rejectWithValue('User not logged in')
+
+    const { data, error } = await supabase
+      .from('blogs')
+      .insert({ ...payload, user_id: userId })
+      .select()
+      .single()
+
+    if (error) return rejectWithValue(error.message)
     return data as Blog
   }
 )
@@ -40,24 +65,28 @@ export const createBlog = createAsyncThunk(
 // ✏️ Update Blog
 export const updateBlog = createAsyncThunk(
   'blogs/updateBlog',
-  async (payload: { id: string; title: string; content: string }) => {
+  async (payload: { id: string; title: string; content: string }, { rejectWithValue }) => {
     const { data, error } = await supabase
       .from('blogs')
       .update({ title: payload.title, content: payload.content })
       .eq('id', payload.id)
       .select()
       .single()
-    if (error) throw new Error(error.message)
+
+    if (error) return rejectWithValue(error.message)
     return data as Blog
   }
 )
 
 // ❌ Delete Blog
-export const deleteBlog = createAsyncThunk('blogs/deleteBlog', async (id: string) => {
-  const { error } = await supabase.from('blogs').delete().eq('id', id)
-  if (error) throw new Error(error.message)
-  return id
-})
+export const deleteBlog = createAsyncThunk(
+  'blogs/deleteBlog',
+  async (id: string, { rejectWithValue }) => {
+    const { error } = await supabase.from('blogs').delete().eq('id', id)
+    if (error) return rejectWithValue(error.message)
+    return id
+  }
+)
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -65,7 +94,6 @@ const blogSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch
       .addCase(fetchBlogs.pending, (state) => {
         state.loading = true
         state.error = null
@@ -76,20 +104,17 @@ const blogSlice = createSlice({
       })
       .addCase(fetchBlogs.rejected, (state, action) => {
         state.loading = false
-        state.error = action.error.message || 'Failed to fetch blogs'
+        state.error = action.payload as string
       })
-      // Create
       .addCase(createBlog.fulfilled, (state, action) => {
         state.blogs.unshift(action.payload)
       })
-      // Update
       .addCase(updateBlog.fulfilled, (state, action) => {
-        const index = state.blogs.findIndex(b => b.id === action.payload.id)
+        const index = state.blogs.findIndex((b) => b.id === action.payload.id)
         if (index !== -1) state.blogs[index] = action.payload
       })
-      // Delete
       .addCase(deleteBlog.fulfilled, (state, action) => {
-        state.blogs = state.blogs.filter(b => b.id !== action.payload)
+        state.blogs = state.blogs.filter((b) => b.id !== action.payload)
       })
   },
 })
