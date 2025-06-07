@@ -47,7 +47,7 @@ const EditBlog: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-4">Edit Blog</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center sm:text-left">Edit Blog</h2>
 
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
@@ -59,7 +59,7 @@ const EditBlog: React.FC = () => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded text-sm sm:text-base"
             required
           />
         </div>
@@ -69,15 +69,15 @@ const EditBlog: React.FC = () => {
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full border px-3 py-2 rounded h-40"
+            className="w-full border px-3 py-2 rounded h-40 text-sm sm:text-base"
             required
           />
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+            className="w-full sm:w-auto bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition text-sm sm:text-base"
           >
             Update Blog
           </button>
@@ -85,7 +85,7 @@ const EditBlog: React.FC = () => {
           <button
             type="button"
             onClick={handleDelete}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+            className="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition text-sm sm:text-base"
           >
             Delete Blog
           </button>
