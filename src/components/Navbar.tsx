@@ -43,7 +43,6 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => {
                 Logout
               </button>
             ) : (
-              // Removed the Login and Register links, so show nothing here for not logged in
               null
             )}
           </div>

@@ -19,7 +19,7 @@ const BlogList: React.FC = () => {
   }, [dispatch]);
 
   const handleDelete = (id: string) => {
-    const confirmed = confirm('Are you sure you want to delete this blog?'); // ✅ Add confirm
+    const confirmed = confirm('Are you sure you want to delete this blog?');
     if (!confirmed) return;
 
     dispatch(deleteBlog(id));

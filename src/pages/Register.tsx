@@ -32,7 +32,7 @@ const Register: React.FC = () => {
 
   const handleClosePopup = () => {
     setPopupMessage(null);
-    navigate('/login'); // Redirect to login page after popup closes
+    navigate('/login'); 
   };
 
   return (
